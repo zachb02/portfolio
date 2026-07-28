@@ -69,7 +69,7 @@ export function Hero() {
       <div className="relative mx-auto max-w-6xl">
         <div className="hero-badge mb-8 inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/5 px-4 py-1.5">
           <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60 motion-reduce:animate-none" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
           </span>
           <span className="font-mono-label text-xs text-accent">

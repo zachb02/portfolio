@@ -47,12 +47,15 @@ export function StoryTimeline() {
 
         if (i === cards.length - 1) return;
 
-        // Each chapter pins at the top and recedes as the next one arrives,
-        // producing the physical "stacked pages" feel of a story unfolding.
+        // Each chapter pins at the top and unpins exactly when the next one
+        // arrives - a clean one-at-a-time swap, not an ever-growing stack of
+        // pinned cards sitting underneath (that pattern piles up all prior
+        // cards until the very last one, which is both a performance cost
+        // and a visible seam at each transition).
         ScrollTrigger.create({
           trigger: card,
           start: "top top",
-          endTrigger: cards[cards.length - 1],
+          endTrigger: cards[i + 1],
           end: "top top",
           pin: true,
           pinSpacing: false,

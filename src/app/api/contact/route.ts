@@ -19,11 +19,14 @@ const ContactSchema = z.object({
 });
 
 // In-memory sliding-window limiter. Resets on cold start and isn't shared
-// across serverless instances, so it's a soft deterrent, not a hard
-// guarantee - fine for a personal contact form, not sufficient at scale.
-// For a harder guarantee, put Upstash Redis or Vercel KV behind this.
+// across serverless instances - and the key is a client-suppliable header,
+// so it's a soft deterrent against casual abuse, not a hard guarantee (a
+// direct attacker rotating x-forwarded-for gets a fresh bucket each time).
+// Fine for a personal contact form; for a harder guarantee, put Upstash
+// Redis or Vercel KV behind this instead.
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX = 3;
+const MAX_TRACKED_KEYS = 5_000; // bound worst-case memory in a long-lived instance
 const hits = new Map<string, number[]>();
 
 function isRateLimited(key: string): boolean {
@@ -33,8 +36,20 @@ function isRateLimited(key: string): boolean {
   );
   recent.push(now);
   hits.set(key, recent);
+
+  // Cheap eviction: if the map grows past the cap, drop keys with no
+  // activity in the current window. Runs O(map size) but only once the
+  // cap is hit, not on every request.
+  if (hits.size > MAX_TRACKED_KEYS) {
+    for (const [k, times] of hits) {
+      if (times.every((t) => now - t >= RATE_LIMIT_WINDOW_MS)) hits.delete(k);
+    }
+  }
+
   return recent.length > RATE_LIMIT_MAX;
 }
+
+const MAX_BODY_BYTES = 10_000; // generous for a ~1300-char JSON payload
 
 export async function POST(request: Request) {
   const ip =
@@ -46,6 +61,11 @@ export async function POST(request: Request) {
       { error: "Too many messages. Try again in a minute." },
       { status: 429 }
     );
+  }
+
+  const contentLength = Number(request.headers.get("content-length") ?? 0);
+  if (contentLength > MAX_BODY_BYTES) {
+    return Response.json({ error: "Message too large." }, { status: 413 });
   }
 
   const body = await request.json().catch(() => null);
@@ -63,6 +83,14 @@ export async function POST(request: Request) {
   if (company) {
     return Response.json({ ok: true });
   }
+
+  // Strip control/non-printable characters and collapse runs of newlines
+  // so a submitted message can't forge extra lines or odd formatting in
+  // the delivered text.
+  const clean = (s: string) =>
+    s.replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g, "").replace(/\n{3,}/g, "\n\n");
+  const safeName = clean(name);
+  const safeMessage = clean(message);
 
   const accountSid = process.env.TWILIO_ACCOUNT_SID;
   const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -84,7 +112,7 @@ export async function POST(request: Request) {
     await client.messages.create({
       to: DESTINATION_NUMBER,
       from: fromNumber,
-      body: `New portfolio contact from ${name} (${email}):\n\n${message.slice(0, 700)}`,
+      body: `New portfolio contact from ${safeName} (${email}):\n\n${safeMessage.slice(0, 700)}`,
     });
     return Response.json({ ok: true });
   } catch (error) {
