@@ -129,3 +129,65 @@ export const skillGroups: SkillGroup[] = [
     ],
   },
 ];
+
+export const caseStudy = {
+  company: "Magnet AI",
+  url: "https://gomagnet.ai",
+  role: "Co-Founder",
+  summary:
+    "Small businesses don't have a marketing team - they have a founder doing it themselves at midnight. Magnet AI is the AI-native platform I co-founded to close that gap: it researches a business, writes the campaign, and runs it on Meta and Google, with a human approval gate before anything goes live.",
+  highlights: [
+    {
+      title: "Competitor intelligence",
+      body: "Shipped a tool that scrapes the Meta Ads Library to surface rival creatives and targeting strategies in real time.",
+    },
+    {
+      title: "Autopilot agent",
+      body: "Built an autonomous agent on a JSON ReAct loop that monitors campaign performance and proposes budget and bidding moves, gated behind explicit user approval.",
+    },
+    {
+      title: "MCP server",
+      body: "Developed a remote MCP server exposing five stateless marketing tools directly to Claude and ChatGPT.",
+    },
+  ],
+  architecture: [
+    { label: "Business Research", icon: "MagnifyingGlass" },
+    { label: "AI Campaign Generation", icon: "Sparkle" },
+    { label: "Meta / Google Push", icon: "PaperPlaneTilt" },
+    { label: "Autopilot Agent", icon: "ShieldCheck", note: "approval-gated" },
+  ],
+  screenshots: [
+    { src: "/case-study/dashboard.png", label: "Dashboard" },
+    { src: "/case-study/competitor-research.png", label: "Competitor Research" },
+    { src: "/case-study/campaign-wizard.png", label: "Campaign Wizard" },
+  ],
+};
+
+export type FeaturedRepo = {
+  name: string;
+  url: string;
+  description: string;
+  language: string;
+};
+
+// Verified against the live GitHub API response for github.com/zachb02 -
+// only the two genuinely original, substantive repos are featured here.
+// (gstack/CStack on the same account are forks of other people's tooling
+// and are deliberately excluded from this list.)
+export const githubHandle = "zachb02";
+export const featuredRepos: FeaturedRepo[] = [
+  {
+    name: "sprynapp",
+    url: "https://github.com/zachb02/sprynapp",
+    description:
+      "An app that, after inserting an Anthropic API key, steps through whatever goal you envision with a curated plan. Open-source, free to use.",
+    language: "TypeScript",
+  },
+  {
+    name: "datascience-termproj",
+    url: "https://github.com/zachb02/datascience-termproj",
+    description:
+      "Term project for a data science class examining the link between the music genres people listen to and their rates of anxiety, depression, OCD, and insomnia.",
+    language: "Jupyter Notebook",
+  },
+];
