@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { DownloadSimple } from "@phosphor-icons/react/dist/ssr";
 import { profile } from "@/lib/resume-data";
 
 export function Nav() {
@@ -24,6 +25,14 @@ export function Nav() {
           >
             Skills
           </Link>
+          <a
+            href="/resume.pdf"
+            download
+            className="hidden items-center gap-1.5 text-sm text-foreground-muted transition-colors hover:text-foreground sm:inline-flex"
+          >
+            <DownloadSimple size={14} weight="bold" />
+            Resume
+          </a>
           <Link
             href="/contact"
             className="rounded-full border border-accent/40 bg-accent/10 px-4 py-1.5 text-sm font-medium text-accent transition-colors hover:bg-accent/20"
