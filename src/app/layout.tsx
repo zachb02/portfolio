@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import { profile } from "@/lib/resume-data";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -16,7 +17,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://zachbar.dev"),
+  metadataBase: new URL(SITE_URL),
   title: `${profile.name} - ${profile.role}`,
   description: profile.tagline,
   openGraph: {
