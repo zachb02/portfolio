@@ -1,6 +1,7 @@
 import { Nav } from "@/components/nav";
 import { Hero } from "@/components/hero";
 import { FlagshipWork } from "@/components/flagship-work";
+import { AdDemo } from "@/components/ad-demo";
 import { StoryTimeline } from "@/components/story-timeline";
 import { NowStrip } from "@/components/now-strip";
 import { SkillsGrid } from "@/components/skills-grid";
@@ -13,6 +14,7 @@ export default function Home() {
       <main>
         <Hero />
         <FlagshipWork />
+        <AdDemo />
         <StoryTimeline />
         <NowStrip />
         <SkillsGrid />
