@@ -5,6 +5,7 @@ import { AdDemo } from "@/components/ad-demo";
 import { StoryTimeline } from "@/components/story-timeline";
 import { NowStrip } from "@/components/now-strip";
 import { SkillsGrid } from "@/components/skills-grid";
+import { GithubProof } from "@/components/github-proof";
 import { SiteFooter } from "@/components/site-footer";
 
 export default function Home() {
@@ -18,6 +19,7 @@ export default function Home() {
         <StoryTimeline />
         <NowStrip />
         <SkillsGrid />
+        <GithubProof />
       </main>
       <SiteFooter />
     </>
