@@ -28,10 +28,11 @@ export function Nav() {
           <a
             href="/resume.pdf"
             download
-            className="hidden items-center gap-1.5 text-sm text-foreground-muted transition-colors hover:text-foreground sm:inline-flex"
+            aria-label="Download resume"
+            className="inline-flex items-center gap-1.5 text-sm text-foreground-muted transition-colors hover:text-foreground"
           >
             <DownloadSimple size={14} weight="bold" />
-            Resume
+            <span className="hidden sm:inline">Resume</span>
           </a>
           <Link
             href="/contact"

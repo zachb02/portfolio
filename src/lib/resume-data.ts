@@ -156,10 +156,13 @@ export const caseStudy = {
     { label: "Meta / Google Push", icon: "PaperPlaneTilt" },
     { label: "Autopilot Agent", icon: "ShieldCheck", note: "approval-gated" },
   ],
+  // Real dimensions per screenshot (sips -g pixelWidth -g pixelHeight) - these
+  // must match the actual PNG files or next/image reserves the wrong aspect
+  // ratio and the image renders squished/stretched.
   screenshots: [
-    { src: "/case-study/dashboard.png", label: "Dashboard" },
-    { src: "/case-study/competitor-research.png", label: "Competitor Research" },
-    { src: "/case-study/campaign-wizard.png", label: "Campaign Wizard" },
+    { src: "/case-study/dashboard.png", label: "Dashboard", width: 1440, height: 900 },
+    { src: "/case-study/competitor-research.png", label: "Competitor Research", width: 1440, height: 560 },
+    { src: "/case-study/campaign-wizard.png", label: "Campaign Wizard", width: 1440, height: 900 },
   ],
 };
 

@@ -56,7 +56,7 @@ export function FlagshipWork() {
   }, []);
 
   return (
-    <section ref={rootRef} className="px-6 py-32">
+    <section id="work" ref={rootRef} className="px-6 py-32">
       <div className="mx-auto max-w-6xl">
         <span className="flagship-reveal font-mono-label translate-y-3 text-xs text-accent opacity-0">
           Flagship Work
@@ -142,8 +142,8 @@ export function FlagshipWork() {
               <Image
                 src={caseStudy.screenshots[active].src}
                 alt={`Magnet AI - ${caseStudy.screenshots[active].label}`}
-                width={1440}
-                height={900}
+                width={caseStudy.screenshots[active].width}
+                height={caseStudy.screenshots[active].height}
                 className="w-full"
                 priority={active === 0}
               />

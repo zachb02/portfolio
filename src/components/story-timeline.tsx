@@ -78,7 +78,7 @@ export function StoryTimeline() {
   }, []);
 
   return (
-    <section id="work" ref={rootRef} className="relative px-6 py-32">
+    <section ref={rootRef} className="relative px-6 py-32">
       <div className="mx-auto mb-20 max-w-6xl">
         <h2 className="max-w-2xl text-3xl font-medium tracking-tight sm:text-4xl">
           Six roles, one thread. Teaching people to think in code,

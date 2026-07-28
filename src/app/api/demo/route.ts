@@ -14,17 +14,24 @@ const hits = new Map<string, number[]>();
 
 function isRateLimited(key: string): boolean {
   const now = Date.now();
+
+  // Hard cap on tracked keys: if this is a new key and we're already at
+  // capacity, evict the oldest-inserted entry (Map preserves insertion
+  // order) before adding. Pruning only already-expired entries doesn't
+  // bound memory - a flood of fresh spoofed keys never qualifies as
+  // "expired," so the map grows unboundedly and every request pays an
+  // ever-larger full-scan cost. Oldest-first eviction guarantees the map
+  // never exceeds MAX_TRACKED_KEYS regardless of attack pattern.
+  if (!hits.has(key) && hits.size >= MAX_TRACKED_KEYS) {
+    const oldestKey = hits.keys().next().value;
+    if (oldestKey !== undefined) hits.delete(oldestKey);
+  }
+
   const recent = (hits.get(key) ?? []).filter(
     (t) => now - t < RATE_LIMIT_WINDOW_MS
   );
   recent.push(now);
   hits.set(key, recent);
-
-  if (hits.size > MAX_TRACKED_KEYS) {
-    for (const [k, times] of hits) {
-      if (times.every((t) => now - t >= RATE_LIMIT_WINDOW_MS)) hits.delete(k);
-    }
-  }
 
   return recent.length > RATE_LIMIT_MAX;
 }
